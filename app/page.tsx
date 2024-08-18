@@ -1,23 +1,40 @@
-import ProductCard from "@/Components/ProductCard/page";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { fetchProducts } from "@/slices/productSlice";
+import ProductsPage from "@/Components/ProductsPage/page";
+import { IProduct } from "@/type";
 
 function Home() {
+  const dispatch = useAppDispatch();
+  const {
+    items: data,
+    status,
+    error,
+  } = useAppSelector((state) => state.products);
+  const [products, setProducts] = useState<IProduct[]>(data.products);
+
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchProducts());
+    }
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    if (data.products) {
+      setProducts(data.products);
+    }
+  }, [data.products]);
+
+  if (status === "loading") return <div>Loading...</div>;
+
+  if (status === "failed") return <div>Error: {error}</div>;
+
   return (
-    <div
-      style={{
-        display: "grid",
-        // gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-        gap: "1rem",
-        padding: "1rem",
-        gridTemplateColumns: "repeat(2, 1fr)",
-      }}
-    >
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-    </div>
+    <section style={{ width: "100vw", height: "100vh" }}>
+      {products.length > 0 && <ProductsPage products={products} />}
+    </section>
   );
 }
 

@@ -1,31 +1,9 @@
 import { NextResponse } from "next/server";
 import { fakerEN_IN as faker } from "@faker-js/faker";
+import { IProduct } from "@/type";
 
 const NUMBER_OF_BRANDS = Number(process.env.NUMBER_OF_BRANDS) || 5;
 const NUMBER_OF_PRODUCTS = Number(process.env.NUMBER_OF_PRODUCTS) || 24;
-
-// Types
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  rating: number;
-  reviews: number;
-  brand: string;
-  department: string;
-  product: string;
-  productAdjective: string;
-  productDescription: string;
-  productMaterial: string;
-  compareAtPrice: number;
-}
-
-interface TrendingProduct {
-  id: string;
-  name: string;
-  image: string;
-}
 
 const categories = [
   {
@@ -295,7 +273,7 @@ function generateBrandNames(count: number): string[] {
   return Array.from({ length: count }, () => faker.company.name());
 }
 
-function getProductDetails(brandName: string): Product {
+function getProductDetails(brandName: string): IProduct {
   const category = faker.helpers.arrayElement(categories);
   const product = faker.helpers.arrayElement(category.products);
   const material = faker.helpers.arrayElement(category.materials);
@@ -324,7 +302,7 @@ function getProductDetails(brandName: string): Product {
   };
 }
 
-function generateProductData(count: number, brands: string[]): Product[] {
+function generateProductData(count: number, brands: string[]): IProduct[] {
   return Array.from({ length: count }, (_, index) =>
     getProductDetails(brands[index % brands.length])
   );

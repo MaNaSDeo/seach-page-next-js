@@ -1,42 +1,12 @@
 import Image from "next/image";
-
 import style from "./ProductCard.module.scss";
+import { type IProduct } from "@/type";
 
 interface ProductCardProps {
-  product: {
-    id: string;
-    name: string;
-    price: number;
-    compareAtPrice: number;
-    image: string;
-    rating: number;
-    reviews: number;
-    department: string;
-    product: string;
-    productAdjective: string;
-    productDescription: string;
-    productMaterial: string;
-    brand: string;
-  };
+  product: IProduct;
 }
 
-function ProductCard() {
-  const product = {
-    id: "4a2823be-dd68-4242-a8ec-5f411d097702",
-    name: "Small Satin Nightshirt",
-    price: 1201.0,
-    compareAtPrice: 1850.0,
-    image: "https://loremflickr.com/480/640/sleepwear?lock=2936627053723648",
-    rating: 5,
-    reviews: 378,
-    department: "Sleepwear",
-    product: "Nightshirt",
-    productAdjective: "Small",
-    productDescription:
-      "This small nightshirt is made of high-quality satin, perfect for sleepwear enthusiasts. The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted at the rear of the engine and four wheel drive",
-    productMaterial: "Satin",
-    brand: "Sinha - Bhat",
-  };
+function ProductCard({ product }: ProductCardProps) {
   return (
     <div className={style.productCard}>
       <div className={style.imageContainer}>
