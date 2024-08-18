@@ -8,7 +8,7 @@ const NUMBER_OF_PRODUCTS = Number(process.env.NUMBER_OF_PRODUCTS) || 24;
 interface Product {
   id: string;
   name: string;
-  price: string;
+  price: number;
   image: string;
   rating: number;
   reviews: number;
@@ -18,6 +18,7 @@ interface Product {
   productAdjective: string;
   productDescription: string;
   productMaterial: string;
+  compareAtPrice: number;
 }
 
 interface TrendingProduct {
@@ -305,7 +306,8 @@ function getProductDetails(brandName: string): Product {
   return {
     id: faker.string.uuid(),
     name: name,
-    price: faker.commerce.price({ min: 100, max: 3000, symbol: "₹" }),
+    price: Number(faker.commerce.price({ min: 100, max: 3000 })),
+    compareAtPrice: Number(faker.commerce.price({ min: 100, max: 3000 })),
     image: faker.image.urlLoremFlickr({
       width: 480,
       height: 640,
