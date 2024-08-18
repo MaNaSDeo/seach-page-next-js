@@ -1,7 +1,7 @@
 .container {
   position: fixed;
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: space-around;
   will-change: transform;
   width: 100%;
@@ -51,7 +51,7 @@
       border-radius: 1rem;
       border: none;
       width: 500px;
-      height: 2.75rem;
+      height: 2.8rem;
       background-color: white;
       padding: 0 0.75rem;
 
