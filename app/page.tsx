@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { fetchProducts } from "@/slices/productSlice";
 import ProductsPage from "@/Components/ProductsPage/page";
 import { IProduct } from "@/type";
+import NavBar from "@/Components/NavBar/page";
+import style from "./Main.module.scss";
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -32,7 +34,8 @@ function Home() {
   if (status === "failed") return <div>Error: {error}</div>;
 
   return (
-    <section style={{ width: "100vw", height: "100vh" }}>
+    <section className={style.container}>
+      <NavBar />
       {products.length > 0 && <ProductsPage products={products} />}
     </section>
   );
