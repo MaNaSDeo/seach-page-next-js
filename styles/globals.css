@@ -1,5 +1,7 @@
 /* /styles/reset.css */
 
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Grey+Qo&family=Matemasie&display=swap");
+
 /* Reset box-sizing to border-box for all elements */
 *,
 *::before,
