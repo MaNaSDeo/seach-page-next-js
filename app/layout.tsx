@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hello World App",
+  title: "Product Search App",
   description: "A simple Next.js TypeScript app",
 };
 
