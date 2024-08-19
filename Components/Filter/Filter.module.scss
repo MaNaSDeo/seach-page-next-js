@@ -1,0 +1,17 @@
+.container {
+  width: 22.5%;
+  margin-top: 56px;
+  gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+
+  .heading {
+    font-size: 1.25rem;
+    text-transform: capitalize;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    color: #212121;
+    line-height: 1.4;
+  }
+}

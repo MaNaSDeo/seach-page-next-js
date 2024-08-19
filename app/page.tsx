@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { fetchProducts } from "@/slices/productSlice";
-import ProductsPage from "@/Components/ProductsPage/page";
-import { IProduct } from "@/type";
-import NavBar from "@/Components/NavBar/page";
 import style from "./Main.module.scss";
+import ProductsPage from "@/Components/ProductsPage/page";
+import NavBar from "@/Components/NavBar/page";
+import Filter from "@/Components/Filter/page";
+import { IProduct } from "@/type";
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -36,7 +37,12 @@ function Home() {
   return (
     <section className={style.container}>
       <NavBar />
-      {products.length > 0 && <ProductsPage products={products} />}
+      {products.length > 0 && (
+        <div className={style.filterNProducts}>
+          <Filter />
+          <ProductsPage products={products} />
+        </div>
+      )}
     </section>
   );
 }
