@@ -76,8 +76,8 @@ const PriceSlider: React.FC<PriceSliderProps> = ({ min, max, onChange }) => {
         />
       </div>
       <div className={styles.sliderValues}>
-        <div className={styles.sliderLeftValue}>${minValue}</div>
-        <div className={styles.sliderRightValue}>${maxValue}</div>
+        <div className={styles.sliderLeftValue}>₹{minValue}</div>
+        <div className={styles.sliderRightValue}>₹{maxValue}</div>
       </div>
     </div>
   );
