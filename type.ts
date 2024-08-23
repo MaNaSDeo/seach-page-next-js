@@ -25,3 +25,12 @@ export interface IProductState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
+
+// export interface FilterState {
+//   [key: string]: string[];
+// }
+
+export interface FilterState {
+  [key: string]: string[] | { min: number; max: number };
+  priceRange: { min: number; max: number };
+}

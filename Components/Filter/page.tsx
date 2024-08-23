@@ -3,59 +3,130 @@
 import style from "./Filter.module.scss";
 import PriceSlider from "./PriceSlider/page";
 import FilterGroup from "./CheckBox/Page";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAppSelector } from "@/hooks";
+import { type IProduct, type FilterState } from "@/type";
 
-interface FilterState {
-  [key: string]: string[];
+interface FilterProps {
+  onFilterChange: (filters: FilterState) => void;
 }
 
-const filtersData = [
-  {
-    title: "VENDOR",
-    options: [
-      { id: "aderma", label: "Aderma" },
-      { id: "aloelab", label: "Aloelab" },
-      { id: "aromist_co", label: "Aromist Co" },
-      // ... add more vendors
-    ],
-  },
-  {
-    title: "CATEGORY",
-    options: [
-      { id: "skincare", label: "Skincare" },
-      { id: "haircare", label: "Haircare" },
-      { id: "makeup", label: "Makeup" },
-      // ... add more categories
-    ],
-  },
-  {
-    title: "PRICE RANGE",
-    options: [
-      { id: "under_50", label: "Under $50" },
-      { id: "50_to_100", label: "$50 - $100" },
-      { id: "over_100", label: "Over $100" },
-      // ... add more price ranges
-    ],
-  },
-];
+function Filter({ onFilterChange }: FilterProps) {
+  const { items: data } = useAppSelector((state) => state.products);
+  const [filters, setFilters] = useState<FilterState>({
+    priceRange: { min: 0, max: 10000 },
+  });
+  const [overallPriceRange, setOverallPriceRange] = useState({
+    min: 0,
+    max: 10000,
+  });
+  const [filtersData, setFiltersData] = useState<
+    Array<{ title: string; options: Array<{ id: string; label: string }> }>
+  >([]);
 
-function Filter() {
-  const handlePriceChange = (min: number, max: number) => {
-    console.log(`Price range: ₹${min} - ₹${max}`);
-    // Do something with the new price range
-  };
-  const [filters, setFilters] = useState<FilterState>({});
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => setIsOpen(!isOpen);
 
+  useEffect(() => {
+    if (data.products.length > 0) {
+      const newFiltersData = [
+        {
+          title: "RATING",
+          options: [...new Set(data.products.map((p) => p.rating))].map(
+            (rating) => ({
+              id: `rating_${rating}`,
+              label: `${rating} Stars`,
+            })
+          ),
+        },
+        {
+          title: "DEPARTMENT",
+          options: [...new Set(data.products.map((p) => p.department))].map(
+            (dept) => ({
+              id: dept,
+              label: dept,
+            })
+          ),
+        },
+        {
+          title: "PRODUCT",
+          options: [...new Set(data.products.map((p) => p.product))].map(
+            (prod) => ({
+              id: prod,
+              label: prod,
+            })
+          ),
+        },
+        {
+          title: "PRODUCT ADJECTIVE",
+          options: [
+            ...new Set(data.products.map((p) => p.productAdjective)),
+          ].map((adj) => ({
+            id: adj,
+            label: adj,
+          })),
+        },
+        {
+          title: "PRODUCT MATERIAL",
+          options: [
+            ...new Set(data.products.map((p) => p.productMaterial)),
+          ].map((material) => ({
+            id: material,
+            label: material,
+          })),
+        },
+        {
+          title: "BRAND",
+          options: [...new Set(data.products.map((p) => p.brand))].map(
+            (brand) => ({
+              id: brand,
+              label: brand,
+            })
+          ),
+        },
+      ];
+
+      setFiltersData(newFiltersData);
+
+      const minPrice = Math.min(...data.products.map((p) => p.price));
+      const maxPrice = Math.max(...data.products.map((p) => p.price));
+      setOverallPriceRange({ min: minPrice, max: maxPrice });
+
+      setFilters((prev) => ({
+        ...prev,
+        priceRange: { min: minPrice, max: maxPrice },
+      }));
+    }
+  }, [data.products]);
+
+  const handlePriceChange = (min: number, max: number) => {
+    console.log(`Price range: ₹${min} - ₹${max}`);
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: { min, max },
+    }));
+    onFilterChange({
+      ...filters,
+      priceRange: { min, max },
+    });
+  };
+
   const handleFilterChange = (
     filterType: string,
-    selectedOptions: string[]
+    selectedOptions: string | string[]
   ) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterType]: selectedOptions,
+    const newSelectedOptions = Array.isArray(selectedOptions)
+      ? selectedOptions
+      : [selectedOptions];
+    setFilters((prev) => ({
+      ...prev,
+      [filterType]: newSelectedOptions,
     }));
+    onFilterChange({
+      ...filters,
+      [filterType]: newSelectedOptions,
+    });
   };
 
   return (
@@ -83,7 +154,11 @@ function Filter() {
           </div>
           {isOpen && (
             <div className={style.filterContent}>
-              <PriceSlider min={0} max={1000} onChange={handlePriceChange} />
+              <PriceSlider
+                min={overallPriceRange.min}
+                max={overallPriceRange.max}
+                onChange={handlePriceChange}
+              />
             </div>
           )}
         </div>
@@ -93,7 +168,9 @@ function Filter() {
             key={filter.title}
             title={filter.title}
             options={filter.options}
-            onChange={handleFilterChange}
+            onChange={(selectedOptions) =>
+              handleFilterChange(filter.title, selectedOptions)
+            }
           />
         ))}
       </div>
